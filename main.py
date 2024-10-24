@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlmodel import Field, Session, SQLModel, create_engine
+from sqlmodel import Session, SQLModel
 
+from connector import get_engine
 from models import ExerciseSet
 
 app = FastAPI()
@@ -15,9 +16,7 @@ app.add_middleware(
 )
 
 
-# Create the SQLite database and table
-DATABASE_URL = "sqlite:///exercise_sets.db"
-engine = create_engine(DATABASE_URL)
+engine = get_engine()
 
 # Create the database and tables
 SQLModel.metadata.create_all(engine)

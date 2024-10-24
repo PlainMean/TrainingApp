@@ -1,11 +1,11 @@
-from sqlmodel import Field, Session, create_engine, select
+from sqlmodel import Session, select
 
+from connector import get_engine
 from models import ExerciseSet
 
-DATABASE_URL = "sqlite:///exercise_sets.db"
-engine = create_engine(DATABASE_URL)
 
 def print_database_contents():
+    engine = get_engine()
     with Session(engine) as session:
         statement = select(ExerciseSet)
         results = session.exec(statement).all()

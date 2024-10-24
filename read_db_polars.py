@@ -1,9 +1,8 @@
-import sqlite3
-
 import polars as pl
 
-# Create your connection.
-cnx = sqlite3.connect('exercise_sets.db')
+from connector import get_conn
 
-df = pl.read_database("SELECT * FROM exerciseset", cnx)
+conn = get_conn()
+
+df = pl.read_database("SELECT * FROM exerciseset", conn)
 print(df)

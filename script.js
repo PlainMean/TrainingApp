@@ -1,6 +1,8 @@
 function init() {
     console.log("RUNNING")
     addExercise("squat")
+    addExercise("bench")
+    // addExercise("deadlift")
 }
 
 init()
@@ -56,7 +58,7 @@ function addExInterface(exerciseDivId) {
 
     exerciseDiv.appendChild(selectBox);
 
-    [1, 2].forEach(val => {
+    [3, 5, 8].forEach(val => {
         const option = document.createElement('option');
         option.value = val;
         option.textContent = val;
@@ -118,7 +120,7 @@ function addExInterface(exerciseDivId) {
     }
 
     // this only runs once in the beginning?
-    selectBox.value = 2;
+    selectBox.value = 3;
 
     // adds 2
     addInputs(2)
