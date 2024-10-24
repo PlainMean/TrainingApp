@@ -39,6 +39,7 @@ const exerciseInterface = (exerciseDivId) => {
             const rowDiv = document.createElement('div')
             rowDiv.style.display = 'flex';
             rowDiv.style.justifyContent = 'center';
+            rowDiv.className = 'row'
 
             // which set
             const num = document.createElement('p');
@@ -98,6 +99,7 @@ exerciseInterface("squat");
 
 exerciseInterface("bench");
 
+//TURN INTO FUNCTION
 document.getElementById('submitBtn').addEventListener('click', () => {
     const formContainer = document.getElementById('squat');
     // START FROM HERE
@@ -105,20 +107,30 @@ document.getElementById('submitBtn').addEventListener('click', () => {
     // perhaps queryselectorall(rows) since we know that num rows is
     // dependent on selected sets
     // skip NA fields
-    const inputs = formContainer.querySelectorAll('input');
-    console.log(inputs)
+    const rows = formContainer.querySelectorAll('.row');
 
-    const formData = {};
-    inputs.forEach((input, idx) => {
-        // console.log(input)
+    const setNum = []
+    const weights = []
+    const reps = []
+    rows.forEach((row, idx) => {
+        const inputs = row.querySelectorAll('input');
 
-        formData['set'] = idx;
-        if (input.id.includes('Weight')) {
-            formData['weight'] = input.value;
-        } else if (input.id.includes('Reps')) {
-            formData['reps'] = input.value;
-        }
+        setNum.push(idx + 1)
+
+        inputs.forEach(input => {
+            if (input.id.includes('Weight')) {
+                weights.push(Number(input.value));
+            } else if (input.id.includes('Reps')) {
+                reps.push(Number(input.value));
+            }
+        });
     });
+    const workoutData = {
+        "SET": setNum,
+        "WEIGHT": weights,
+        "REPS": reps
+    };
+    console.log(workoutData)
 
     // create an array for all exercises?
     /*
@@ -142,87 +154,6 @@ document.getElementById('submitBtn').addEventListener('click', () => {
     2024-10-23      "deadlift"  3       100     8
 
             */
-    console.log(formData);
 });
 
 
-
-// exerciseCreator = (name, setsCount) => {
-//     const label = document.createElement('label');
-//     var selectId = `${name}Count`;
-//     label.setAttribute('for', selectId);
-//     label.textContent = name + " ";
-
-//     const select = document.createElement('select');
-//     select.id = selectId;
-//     select.className = 'setsCount';
-
-//     setsCount.forEach(val => {
-//         const option = document.createElement('option');
-//         option.value = val;
-//         option.textContent = val;
-//         select.appendChild(option);
-//     });
-
-//     const container = document.createElement('div');
-//     container.id = selectId + "Div";
-//     container.classList.add('custom-text');
-//     container.appendChild(label);
-//     container.appendChild(select);
-
-//     document.getElementById(selectId).addEventListener(
-//         'change', () => generateBoxes(name, setsCount)
-//     );
-
-//     return container;
-// }
-
-// document.getElementById('squat').appendChild(exerciseCreator('squat', [3,5,8]));
-
-// // create a div
-
-
-// generateBoxes = (exercise, countId) => {
-
-//     const num = parseInt(document.getElementById(countId).value);
-//     const excerciseContainer = document.getElementById(exercise);
-
-//     const boxesContainer = document.createElement('div');
-//     boxesContainer.innerHTML = ''; // Clear previous boxes
-
-//     excerciseContainer.appendChild(boxesContainer)
-
-//     for (let i = 1; i <= num; i++) {
-//         const row = document.createElement('div');
-
-//         row.style.display = 'flex';
-//         row.style.justifyContent = 'center';
-
-//         const setNum = document.createElement('p');
-//         setNum.textContent = i
-//         setNum.className = 'small'
-
-//         const weight = document.createElement('input');
-//         weight.className = 'box';
-
-//         const textWeight = document.createElement('p')
-//         textWeight.textContent = 'KG'
-//         textWeight.className = 'small'
-
-//         const reps = document.createElement('input');
-//         reps.className = 'box';
-//         const textReps = document.createElement('p')
-//         textReps.textContent = 'Reps'
-//         textReps.className = 'small'
-
-//         row.appendChild(setNum);
-//         row.appendChild(weight);
-//         row.appendChild(textWeight);
-//         row.appendChild(reps);
-//         row.appendChild(textReps);
-//         boxesContainer.appendChild(row);
-//     }
-// }
-
-
-// // generateBoxes();
