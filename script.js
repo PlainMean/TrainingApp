@@ -5,6 +5,29 @@ function init() {
 
 init()
 
+function postRequest(data) {
+    const url = "http://127.0.0.1:8000/exercise_set/";
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 
 function addExercise(exercise) {
     addExInterface(exercise)
@@ -116,49 +139,61 @@ function addExListener (exerciseId) {
         const setNum = []
         const weights = []
         const reps = []
+
+        const getCurrentDate = () => {
+            const date = new Date();
+            return date.toISOString().split('T')[0]; // YYYY-MM-DD format
+        };
+
+        const currentDate = getCurrentDate();
+
+
         rows.forEach((row, idx) => {
             const inputs = row.querySelectorAll('input');
 
-            setNum.push(idx + 1)
+            var set = idx + 1
+            setNum.push(set)
+
+            var weight;
+            var rep;
 
             inputs.forEach(input => {
                 if (input.id.includes('Weight')) {
                     weights.push(Number(input.value));
+                    // one is temporary
+                    weight = Number(input.value)
                 } else if (input.id.includes('Reps')) {
                     reps.push(Number(input.value));
+                    // one is temporary
+                    rep = Number(input.value)
                 }
             });
+
+            const data = {
+                time: currentDate,  // Use the desired date in ISO format
+                name: exerciseId,
+                weight: weight,
+                set: set,
+                reps: rep
+            };
+            // ! one post request for each set in the loop
+            postRequest(data)
         });
-        const workoutData = {
-            "SET": setNum,
-            "WEIGHT": weights,
-            "REPS": reps
-        };
-        console.log(workoutData)
+        // const workoutData = {
+        //     "SET": setNum,
+        //     "WEIGHT": weights,
+        //     "REPS": reps
+        // };
+        // console.log(workoutData)
 
-        // create an array for all exercises?
-        /*
-        {
-            "squat" {
-                set {
-                    [1, 2, 3]
-                }
-                weight {
-                    [50,60,70]
-                }
-            }
-                reps {
-                    [10,10,10]
-            }
-        }
-        how will it be stored in the data base??
 
-        WORKOUT_DATE    EXERCISE    SET     WEIGHT  REPS
-        2024-10-23      "squat"     5       50      10
-        2024-10-23      "deadlift"  3       100     8
-
-                */
     });
 
 }
+
+/*
+WORKOUT_DATE    EXERCISE    SET     WEIGHT  REPS
+2024-10-23      "squat"     5       50      10
+2024-10-23      "deadlift"  3       100     8
+*/
 
