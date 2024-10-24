@@ -1,5 +1,17 @@
+function init() {
+    console.log("RUNNING")
+    addExercise("squat")
+}
 
-const exerciseInterface = (exerciseDivId) => {
+init()
+
+
+function addExercise(exercise) {
+    addExInterface(exercise)
+    addExListener(exercise)
+}
+
+function addExInterface(exerciseDivId) {
     var name = exerciseDivId
     console.log(name)
     const exerciseDiv = document.getElementById(exerciseDivId)
@@ -95,65 +107,58 @@ const exerciseInterface = (exerciseDivId) => {
     });
 };
 
-exerciseInterface("squat");
 
-exerciseInterface("bench");
+function addExListener (exerciseId) {
+    document.getElementById('submitBtn').addEventListener('click', () => {
+        const formContainer = document.getElementById(exerciseId);
+        const rows = formContainer.querySelectorAll('.row');
 
-//TURN INTO FUNCTION
-document.getElementById('submitBtn').addEventListener('click', () => {
-    const formContainer = document.getElementById('squat');
-    // START FROM HERE
-    // extract the set number somehow
-    // perhaps queryselectorall(rows) since we know that num rows is
-    // dependent on selected sets
-    // skip NA fields
-    const rows = formContainer.querySelectorAll('.row');
+        const setNum = []
+        const weights = []
+        const reps = []
+        rows.forEach((row, idx) => {
+            const inputs = row.querySelectorAll('input');
 
-    const setNum = []
-    const weights = []
-    const reps = []
-    rows.forEach((row, idx) => {
-        const inputs = row.querySelectorAll('input');
+            setNum.push(idx + 1)
 
-        setNum.push(idx + 1)
-
-        inputs.forEach(input => {
-            if (input.id.includes('Weight')) {
-                weights.push(Number(input.value));
-            } else if (input.id.includes('Reps')) {
-                reps.push(Number(input.value));
-            }
+            inputs.forEach(input => {
+                if (input.id.includes('Weight')) {
+                    weights.push(Number(input.value));
+                } else if (input.id.includes('Reps')) {
+                    reps.push(Number(input.value));
+                }
+            });
         });
+        const workoutData = {
+            "SET": setNum,
+            "WEIGHT": weights,
+            "REPS": reps
+        };
+        console.log(workoutData)
+
+        // create an array for all exercises?
+        /*
+        {
+            "squat" {
+                set {
+                    [1, 2, 3]
+                }
+                weight {
+                    [50,60,70]
+                }
+            }
+                reps {
+                    [10,10,10]
+            }
+        }
+        how will it be stored in the data base??
+
+        WORKOUT_DATE    EXERCISE    SET     WEIGHT  REPS
+        2024-10-23      "squat"     5       50      10
+        2024-10-23      "deadlift"  3       100     8
+
+                */
     });
-    const workoutData = {
-        "SET": setNum,
-        "WEIGHT": weights,
-        "REPS": reps
-    };
-    console.log(workoutData)
 
-    // create an array for all exercises?
-    /*
-    {
-        "squat" {
-            set {
-                [1, 2, 3]
-            }
-            weight {
-                [50,60,70]
-            }
-        }
-            reps {
-                [10,10,10]
-        }
-    }
-    how will it be stored in the data base??
-
-    WORKOUT_DATE    EXERCISE    SET     WEIGHT  REPS
-    2024-10-23      "squat"     5       50      10
-    2024-10-23      "deadlift"  3       100     8
-
-            */
-});
-
+}
 
